@@ -64,14 +64,14 @@ config:
       - DC
       - 3NAC
     default: DC # the device's default is 3NAC; everest IMDs are usually only needed in DC so this is a better default
-  pre_alarm_threshold_kohm:
-    description: 42006 - Pre-alarm threshold setting in kOhm
+  alarm_threshold_kohm:
+    description: 42006 - Alarm threshold setting in kOhm
     type: number
     maximum: 500
     minimum: 1
     default: 500
-  alarm_threshold_kohm:
-    description: 42007 - Alarm threshold setting in kOhm
+  pre_alarm_threshold_kohm:
+    description: 42007 - Pre-alarm threshold setting in kOhm
     type: number
     maximum: 500
     minimum: 1
