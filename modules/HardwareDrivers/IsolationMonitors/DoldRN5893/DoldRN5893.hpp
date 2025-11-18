@@ -23,18 +23,18 @@
 namespace module {
 
 struct Conf {
-    double self_test_timeout_s;
     double device_id;
+    double self_test_timeout_s;
     bool keep_measurement_active;
     bool always_publish_measurements;
-    bool enable_device_timeout;
-    double device_timeout_s;
-    std::string connection_monitoring;
-    bool alarm_persistence;
-    std::string indicator_relay_switching_mode;
+    bool timeout_release;
+    double timeout_s;
+    std::string broken_wire_detect;
+    bool storing_insulation_fault;
+    std::string switching_mode_indicator_relay;
     std::string power_supply_type;
-    double alarm_threshold_kohm;
-    double pre_alarm_threshold_kohm;
+    double response_value_alarm_kohm;
+    double response_value_pre_alarm_kohm;
     std::string coupling_device;
     std::string indicator_relay_k1_function;
     std::string indicator_relay_k2_function;
