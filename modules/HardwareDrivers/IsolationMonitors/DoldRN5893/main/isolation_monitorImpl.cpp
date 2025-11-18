@@ -62,8 +62,8 @@ void isolation_monitorImpl::ready() {
         if (device_fault == DeviceFault_30001::CommunicationFault_Modbus) {
             EVLOG_info << "Device modbus timeout detected, trying to reset device and reconfigure";
 
-            if (not update_control_word1(ControlWord1Action::ResetDevice)) {
-                EVLOG_error << "Failed to reset device";
+            if (not update_control_word1(ControlWord1Action::ResetFaults)) {
+                EVLOG_error << "Failed to reset device faults";
                 continue;
             }
 
@@ -327,6 +327,11 @@ bool isolation_monitorImpl::configure_device() {
         EVLOG_debug << "Device configuration is already up to date, no need to write";
     }
 
+    if (not update_control_word1(ControlWord1Action::ResetFaults)) {
+        EVLOG_error << "Failed to reset device faults after configuration";
+        return false;
+    }
+
     if (not update_control_word1()) {
         EVLOG_error << "Failed to set control word 1 after configuration";
         return false;
@@ -394,8 +399,8 @@ void isolation_monitorImpl::raise_communication_fault() {
 }
 
 bool isolation_monitorImpl::update_control_word1(ControlWord1Action action) {
-    if (action == ControlWord1Action::ResetDevice) {
-        return write_holding_register(0, 1U << 1); // Bit 1: device reset
+    if (action == ControlWord1Action::ResetFaults) {
+        return write_holding_register(0, 1U << 0); // Bit 0: reset
     }
 
     if (action == ControlWord1Action::StartSelfTest) {

@@ -149,7 +149,7 @@ private:
     enum class ControlWord1Action {
         None,
         StartSelfTest,
-        ResetDevice,
+        ResetFaults,
     };
 
     /**
