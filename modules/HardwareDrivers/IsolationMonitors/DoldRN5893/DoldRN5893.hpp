@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Copyright Frickly Systems GmbH
 // Copyright Pionix GmbH and Contributors to EVerest
 #ifndef DOLD_RN5893_HPP
 #define DOLD_RN5893_HPP
