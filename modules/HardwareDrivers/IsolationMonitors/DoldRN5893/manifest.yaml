@@ -2,11 +2,11 @@ description: DOLD RN5893 IMD driver module
 config:
   device_id:
     description: Modbus device address of DOLD RN5893, set via potentiometers on device
-    type: number
+    type: integer
 
   self_test_timeout_s:
     description: Maximum time in seconds a self-test is allowed to take
-    type: number
+    type: integer
     default: 30
 
   keep_measurement_active:
@@ -66,13 +66,13 @@ config:
     default: DC
   response_value_alarm_kohm:
     description: 42006 – Response value Alarm - Alarm threshold setting in kOhm
-    type: number
+    type: integer
     maximum: 500
     minimum: 1
     default: 500
   response_value_pre_alarm_kohm:
     description: 42007 - Response value Pre-Alarm – Pre-Alarm threshold setting in kOhm
-    type: number
+    type: integer
     maximum: 500
     minimum: 1
     default: 500

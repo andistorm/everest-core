@@ -193,8 +193,7 @@ void isolation_monitorImpl::handle_start_self_test(double& test_voltage_V) {
         return;
     }
 
-    self_test_deadline =
-        std::chrono::steady_clock::now() + std::chrono::seconds(static_cast<int>(mod->config.self_test_timeout_s));
+    self_test_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(mod->config.self_test_timeout_s);
 
     self_test_triggered = true;
     // device might take some time to actually start the self test; this is set in the main
@@ -270,8 +269,8 @@ bool isolation_monitorImpl::configure_device() {
     }
     new_settings[3] = power_supply_type; // 2003
 
-    new_settings[5] = static_cast<uint16_t>(mod->config.response_value_alarm_kohm);     // 2005
-    new_settings[6] = static_cast<uint16_t>(mod->config.response_value_pre_alarm_kohm); // 2006
+    new_settings[5] = mod->config.response_value_alarm_kohm;     // 2005
+    new_settings[6] = mod->config.response_value_pre_alarm_kohm; // 2006
 
     uint16_t coupling_device = 1; // see datasheet; 1 = Off
     if (mod->config.coupling_device == "RP5898") {

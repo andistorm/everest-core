@@ -24,8 +24,8 @@
 namespace module {
 
 struct Conf {
-    double device_id;
-    double self_test_timeout_s;
+    int device_id;
+    int self_test_timeout_s;
     bool keep_measurement_active;
     bool always_publish_measurements;
     bool timeout_release;
@@ -34,8 +34,8 @@ struct Conf {
     bool storing_insulation_fault;
     std::string switching_mode_indicator_relay;
     std::string power_supply_type;
-    double response_value_alarm_kohm;
-    double response_value_pre_alarm_kohm;
+    int response_value_alarm_kohm;
+    int response_value_pre_alarm_kohm;
     std::string coupling_device;
     std::string indicator_relay_k1_function;
     std::string indicator_relay_k2_function;
