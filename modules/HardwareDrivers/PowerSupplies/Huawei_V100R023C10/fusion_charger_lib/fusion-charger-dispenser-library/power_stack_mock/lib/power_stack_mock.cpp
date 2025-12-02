@@ -538,13 +538,13 @@ DispenserInformation PowerStackMock::get_dispenser_information() {
                                std::find(software_version_bytes.begin(),
                                          software_version_bytes.end(), '\0'));
 
-  return DispenserInformation{
-      .manufacturer = read_result[0],
-      .model = read_result[1],
-      .protocol_version = read_result[2],
-      .hardware_version = hardware_version,
-      .software_version = software_version,
-  };
+  DispenserInformation dispenser_info;
+  dispenser_info.manufacturer = read_result[0];
+  dispenser_info.model = read_result[1];
+  dispenser_info.protocol_version = read_result[2];
+  dispenser_info.hardware_version = hardware_version;
+  dispenser_info.software_version = software_version;
+  return dispenser_info;
 }
 
 std::string PowerStackMock::get_dispenser_esn() {
@@ -592,13 +592,13 @@ ConnectorCallbackResults PowerStackMock::get_connector_callback_values(
               (uint16_t)offset_from_connector_number(local_connector_number),
           1)[0];
 
-  return ConnectorCallbackResults{
-      .connector_upstream_voltage = contactors_upstream_voltage,
-      .output_voltage = output_voltage,
-      .output_current = output_current,
-      .contactor_status = contactors_status,
-      .electronic_lock_status = electronic_lock_status,
-  };
+  ConnectorCallbackResults results;
+  results.connector_upstream_voltage = contactors_upstream_voltage;
+  results.output_voltage = output_voltage;
+  results.output_current = output_current;
+  results.contactor_status = contactors_status;
+  results.electronic_lock_status = electronic_lock_status;
+  return results;
 }
 
 float PowerStackMock::registers_to_float(std::vector<uint16_t> registers) {

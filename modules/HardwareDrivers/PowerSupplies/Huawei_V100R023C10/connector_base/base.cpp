@@ -27,26 +27,34 @@ void ConnectorBase::do_init_hmac_acquire() {
 }
 
 ConnectorConfig ConnectorBase::get_connector_config() {
-    return {
-        .global_connector_number = (uint16_t)config.global_connector_number,
-        .connector_type = ConnectorType::CCS2,
-        .max_rated_charge_current = (float)config.max_export_current_A,
-        .max_rated_output_power = (float)config.max_export_power_W,
+    ConnectorConfig connector_config;
 
-        .connector_callbacks = {
-            .connector_upstream_voltage = [this]() -> float {
-                return this->external_provided_data.upstream_voltage.load();
-            },
-            .output_voltage = [this]() -> float { return this->external_provided_data.output_voltage.load(); },
-            .output_current = [this]() -> float { return this->external_provided_data.output_current.load(); },
-            .contactor_status = [this]() -> ContactorStatus {
-                return this->external_provided_data.contactor_status.load();
-            },
+    connector_config.global_connector_number = (uint16_t)config.global_connector_number;
+    connector_config.connector_type = ConnectorType::CCS2;
+    connector_config.max_rated_charge_current = (float)config.max_export_current_A;
+    connector_config.max_rated_output_power = (float)config.max_export_power_W;
 
-            // we just return LOCKED as default value
-            .electronic_lock_status = [this]() -> ElectronicLockStatus { return ElectronicLockStatus::LOCKED; },
-        },
+    ConnectorCallbacks connector_callbacks;
+
+    connector_callbacks.connector_upstream_voltage = [this]() -> float {
+        return this->external_provided_data.upstream_voltage.load();
     };
+    connector_callbacks.output_voltage = [this]() -> float {
+        return this->external_provided_data.output_voltage.load();
+    };
+    connector_callbacks.output_current = [this]() -> float {
+        return this->external_provided_data.output_current.load();
+    };
+    connector_callbacks.contactor_status = [this]() -> ContactorStatus {
+        return this->external_provided_data.contactor_status.load();
+    };
+
+    // we just return LOCKED as default value
+    connector_callbacks.electronic_lock_status = [this]() -> ElectronicLockStatus {
+        return ElectronicLockStatus::LOCKED;
+    };
+    connector_config.connector_callbacks = connector_callbacks;
+    return connector_config;
 }
 
 void ConnectorBase::ev_init() {
@@ -251,10 +259,9 @@ void ConnectorBase::update_module_placeholder_errors() {
 
 void ConnectorBase::update_hack() {
     if (this->mod->config.HACK_publish_requested_voltage_current) {
-        auto export_vc = types::power_supply_DC::VoltageCurrent{
-            .voltage_V = (float)this->export_voltage,
-            .current_A = (float)this->export_current_limit,
-        };
+        types::power_supply_DC::VoltageCurrent export_vc;
+        export_vc.voltage_V = (float)this->export_voltage;
+        export_vc.current_A = (float)this->export_current_limit;
         if (this->last_mode == types::power_supply_DC::Mode::Off) {
             export_vc.voltage_V = 0;
             export_vc.current_A = 0;

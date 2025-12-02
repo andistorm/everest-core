@@ -108,78 +108,70 @@ void ConnectorGooseSender::send_stop_request(uint16_t connector_no) {
 void ConnectorGooseSender::send_power_requirement(
     uint16_t connector_no, PowerRequirement requirement) {
   logs.verbose << "Sending power requirement for connector ";
-  auto request = fusion_charger::goose::PowerRequirementRequest{
-      .charging_connector_no = connector_no,
-      .charging_sn = 0xffff,
-      .requirement_type = requirement.type,
-      .mode = requirement.mode,
-      .voltage = requirement.voltage,
-      .current = requirement.current,
-  };
+  fusion_charger::goose::PowerRequirementRequest request;
+  request.charging_connector_no = connector_no;
+  request.charging_sn = 0xffff;
+  request.requirement_type = requirement.type;
+  request.mode = requirement.mode;
+  request.voltage = requirement.voltage;
+  request.current = requirement.current;
 
   send_goose_frame(request.to_pdu(), 0x0001);
 }
 
 void ConnectorGooseSender::send_module_placeholder_request(
     uint16_t connector_no) {
-  send_power_requirement(
-      connector_no,
-      {
-          .type =
-              fusion_charger::goose::RequirementType::ModulePlaceholderRequest,
-          .mode = fusion_charger::goose::Mode::ConstantCurrent,  // todo: None?
-          .current = 0,
-          .voltage = 0,
-      });
+  PowerRequirement requirement;
+  requirement.type =
+      fusion_charger::goose::RequirementType::ModulePlaceholderRequest;
+  requirement.mode =
+      fusion_charger::goose::Mode::ConstantCurrent;  // todo: None?
+  requirement.current = 0;
+  requirement.voltage = 0;
+  send_power_requirement(connector_no, requirement);
 }
 
 void ConnectorGooseSender::send_insulation_detection_voltage_output(
     uint16_t connector_no, float voltage, float current) {
-  send_power_requirement(
-      connector_no, {
-                        .type = fusion_charger::goose::RequirementType::
-                            InsulationDetectionVoltageOutput,
-                        .mode = fusion_charger::goose::Mode::ConstantCurrent,
-                        .current = current,
-                        .voltage = voltage,
-                    });
+  PowerRequirement requirement;
+  requirement.type =
+      fusion_charger::goose::RequirementType::InsulationDetectionVoltageOutput;
+  requirement.mode = fusion_charger::goose::Mode::ConstantCurrent;
+  requirement.current = current;
+  requirement.voltage = voltage;
+  send_power_requirement(connector_no, requirement);
 }
 
 void ConnectorGooseSender::send_insulation_detection_voltage_output_stoppage(
     uint16_t connector_no) {
-  send_power_requirement(
-      connector_no, {
-                        .type = fusion_charger::goose::RequirementType::
-                            InsulationDetectionVoltageOutputStoppage,
-                        .mode = fusion_charger::goose::Mode::ConstantCurrent,
-                        .current = 0,
-                        .voltage = 0,
-                    });
+  PowerRequirement requirement;
+  requirement.type = fusion_charger::goose::RequirementType::
+      InsulationDetectionVoltageOutputStoppage;
+  requirement.mode = fusion_charger::goose::Mode::ConstantCurrent;
+  requirement.current = 0;
+  requirement.voltage = 0;
+  send_power_requirement(connector_no, requirement);
 }
 
 void ConnectorGooseSender::send_precharge_voltage_output(uint16_t connector_no,
                                                          float voltage,
                                                          float current) {
-  send_power_requirement(
-      connector_no,
-      {
-          .type =
-              fusion_charger::goose::RequirementType::PrechargeVoltageOutput,
-          .mode = fusion_charger::goose::Mode::ConstantCurrent,
-          .current = current,
-          .voltage = voltage,
-      });
+  PowerRequirement requirement;
+  requirement.type =
+      fusion_charger::goose::RequirementType::PrechargeVoltageOutput;
+  requirement.mode = fusion_charger::goose::Mode::ConstantCurrent;
+  requirement.current = current;
+  requirement.voltage = voltage;
+  send_power_requirement(connector_no, requirement);
 }
 
 void ConnectorGooseSender::send_charging_voltage_output(uint16_t connector_no,
                                                         float voltage,
                                                         float current) {
-  send_power_requirement(
-      connector_no,
-      {
-          .type = fusion_charger::goose::RequirementType::Charging,
-          .mode = fusion_charger::goose::Mode::ConstantCurrent,
-          .current = current,
-          .voltage = voltage,
-      });
+  PowerRequirement requirement;
+  requirement.type = fusion_charger::goose::RequirementType::Charging;
+  requirement.mode = fusion_charger::goose::Mode::ConstantCurrent;
+  requirement.current = current;
+  requirement.voltage = voltage;
+  send_power_requirement(connector_no, requirement);
 }

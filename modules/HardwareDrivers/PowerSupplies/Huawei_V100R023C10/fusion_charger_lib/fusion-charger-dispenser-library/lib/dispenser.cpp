@@ -365,15 +365,21 @@ void Dispenser::init() {
   error_registers.emplace();
 
   psu_registers.emplace();
-  dispenser_registers.emplace(DispenserRegistersConfig{
-      .manufacturer = dispenser_config.manufacturer,
-      .model = dispenser_config.model,
-      .protocol_version = dispenser_config.protocol_version,
-      .hardware_version = dispenser_config.hardware_version,
-      .software_version = dispenser_config.software_version,
-      .esn = dispenser_config.esn,
-      .connector_count = dispenser_config.charging_connector_count,
-  });
+
+  DispenserRegistersConfig dispenser_registers_config;
+  dispenser_registers_config.manufacturer = dispenser_config.manufacturer;
+  dispenser_registers_config.model = dispenser_config.model;
+  dispenser_registers_config.protocol_version =
+      dispenser_config.protocol_version;
+  dispenser_registers_config.hardware_version =
+      dispenser_config.hardware_version;
+  dispenser_registers_config.software_version =
+      dispenser_config.software_version;
+  dispenser_registers_config.esn = dispenser_config.esn;
+  dispenser_registers_config.connector_count =
+      dispenser_config.charging_connector_count;
+
+  dispenser_registers.emplace(dispenser_registers_config);
 
   // add received callbacks
   psu_registers->psu_mac.add_write_callback(

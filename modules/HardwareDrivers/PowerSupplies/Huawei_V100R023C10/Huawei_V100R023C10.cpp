@@ -81,38 +81,36 @@ void Huawei_V100R023C10::init() {
         invoke_init(*implementations[i]);
     }
 
-    DispenserConfig dispenser_config = {
-        .psu_host = config.psu_ip,
-        .psu_port = (uint16_t)config.psu_port,
-        .eth_interface = config.ethernet_interface,
-        // fixed
-        .manufacturer = 0x02,
-        .model = 0x80,
-        .charging_connector_count = number_of_connectors_used,
-        // end fixed
+    DispenserConfig dispenser_config;
+    dispenser_config.psu_host = config.psu_ip;
+    dispenser_config.psu_port = (uint16_t)config.psu_port;
+    dispenser_config.eth_interface = config.ethernet_interface;
+    // fixed
+    dispenser_config.manufacturer = 0x02;
+    dispenser_config.model = 0x80;
+    dispenser_config.charging_connector_count = number_of_connectors_used;
+    // end fixed
 
-        .esn = config.esn,
-        .send_secure_goose = config.send_secure_goose,
-        .allow_unsecured_goose = config.allow_insecure_goose,
-        .verify_secure_goose_hmac = config.verify_secure_goose,
-        .module_placeholder_allocation_timeout = std::chrono::seconds(config.module_placeholder_allocation_timeout_s),
-    };
+    dispenser_config.esn = config.esn;
+    dispenser_config.secure_goose = config.secure_goose;
+    dispenser_config.allow_unsecure_goose = config.allow_unsecure_goose;
+    dispenser_config.verify_secure_goose_hmac = config.verify_secure_goose_hmac;
+    dispenser_config.module_placeholder_allocation_timeout =
+        std::chrono::seconds(config.module_placeholder_allocation_timeout_s);
 
     if (config.tls_enabled) {
-        dispenser_config.tls_config = tls_util::MutualTlsClientConfig{
-            .ca_cert = config.psu_ca_cert,
-            .client_cert = config.client_cert,
-            .client_key = config.client_key,
-        };
+        tls_util::MutualTlsClientConfig mutual_tls_config;
+        mutual_tls_config.ca_cert = config.psu_ca_cert;
+        mutual_tls_config.client_cert = config.client_cert;
+        mutual_tls_config.client_key = config.client_key;
+        dispenser_config.tls_config = mutual_tls_config;
     }
 
-    logs::LogIntf log = logs::LogIntf{
-        .error = logs::LogFun([](const std::string& message) { EVLOG_error << message; }),
-        .warning = logs::LogFun([](const std::string& message) { EVLOG_warning << message; }),
-        .info = logs::LogFun([](const std::string& message) { EVLOG_info << message; }),
-        .debug = logs::LogFun([](const std::string& message) { EVLOG_debug << message; }),
-        .verbose = logs::LogFun([](const std::string& message) { EVLOG_verbose << message; }),
-    };
+    logs::LogIntf log{logs::LogFun([](const std::string& message) { EVLOG_error << message; }),
+                      logs::LogFun([](const std::string& message) { EVLOG_warning << message; }),
+                      logs::LogFun([](const std::string& message) { EVLOG_info << message; }),
+                      logs::LogFun([](const std::string& message) { EVLOG_debug << message; }),
+                      logs::LogFun([](const std::string& message) { EVLOG_verbose << message; })};
 
     std::vector<ConnectorConfig> connector_configs;
     for (auto& connector : get_connector_bases(this, number_of_connectors_used)) {

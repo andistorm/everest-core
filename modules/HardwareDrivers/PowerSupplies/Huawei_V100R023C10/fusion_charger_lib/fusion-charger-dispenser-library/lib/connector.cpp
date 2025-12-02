@@ -174,43 +174,46 @@ Connector::Connector(ConnectorConfig connector_config,
           dispenser_config.eth_interface.c_str())),
       goose_sender(eth_interface, dispenser_config.send_secure_goose, log),
       log_prefix("Connector #" + std::to_string(local_connector_number) + ": "),
-      connector_registers_config(ConnectorRegistersConfig{
-          .mac_address =
-              {
-                  eth_interface->get_mac_address()[0],
-                  eth_interface->get_mac_address()[1],
-                  eth_interface->get_mac_address()[2],
-                  eth_interface->get_mac_address()[3],
-                  eth_interface->get_mac_address()[4],
-                  eth_interface->get_mac_address()[5],
-              },
-          .type = connector_config.connector_type,
-          .global_connector_no = connector_config.global_connector_number,
-          .connector_number = local_connector_number,
-          .max_rated_charge_current = connector_config.max_rated_charge_current,
-          .rated_output_power_connector =
-              connector_config.max_rated_output_power / 1000,
-          .get_contactor_upstream_voltage =
-              connector_config.connector_callbacks.connector_upstream_voltage,
-          .get_output_voltage =
-              connector_config.connector_callbacks.output_voltage,
-          .get_output_current =
-              connector_config.connector_callbacks.output_current,
-          .get_contactor_status =
-              connector_config.connector_callbacks.contactor_status,
-          .get_electronic_lock_status =
-              connector_config.connector_callbacks.electronic_lock_status,
-      }),
+      connector_registers_config([this, &connector_config,
+                                  local_connector_number]() {
+        ConnectorRegistersConfig config;
+        config.mac_address[0] = eth_interface->get_mac_address()[0];
+        config.mac_address[1] = eth_interface->get_mac_address()[1];
+        config.mac_address[2] = eth_interface->get_mac_address()[2];
+        config.mac_address[3] = eth_interface->get_mac_address()[3];
+        config.mac_address[4] = eth_interface->get_mac_address()[4];
+        config.mac_address[5] = eth_interface->get_mac_address()[5];
+        config.type = connector_config.connector_type;
+        config.global_connector_no = connector_config.global_connector_number;
+        config.connector_number = local_connector_number;
+        config.max_rated_charge_current =
+            connector_config.max_rated_charge_current;
+        config.rated_output_power_connector =
+            connector_config.max_rated_output_power / 1000;
+        config.get_contactor_upstream_voltage =
+            connector_config.connector_callbacks.connector_upstream_voltage;
+        config.get_output_voltage =
+            connector_config.connector_callbacks.output_voltage;
+        config.get_output_current =
+            connector_config.connector_callbacks.output_current;
+        config.get_contactor_status =
+            connector_config.connector_callbacks.contactor_status;
+        config.get_electronic_lock_status =
+            connector_config.connector_callbacks.electronic_lock_status;
+        return config;
+      }()),
       connector_registers(connector_registers_config),
       log(log),
       fsm(
-          {
-              .state_transition = std::bind(&Connector::on_state_transition,
-                                            this, std::placeholders::_1),
-              .any_transition =
-                  std::bind(&Connector::on_state_mode_phase_transition, this,
-                            std::placeholders::_1, std::placeholders::_2),
-          },
+          [this]() {
+            ConnectorFSM::Callbacks callbacks;
+            callbacks.state_transition = std::bind(
+                &Connector::on_state_transition, this, std::placeholders::_1);
+            callbacks.any_transition =
+                std::bind(&Connector::on_state_mode_phase_transition, this,
+                          std::placeholders::_1, std::placeholders::_2);
+            return callbacks;
+          }(),
           log, log_prefix) {}
 
 Connector::~Connector() { cancel_module_placeholder_allocation_timeout(); }
@@ -354,17 +357,18 @@ PsuOutputPortAvailability Connector::get_output_port_availability() {
 }
 
 Capabilities Connector::get_capabilities() {
-  return Capabilities{
-      .max_export_voltage_V =
-          connector_registers.max_rated_psu_voltage.get_value(),
-      .min_export_voltage_V =
-          connector_registers.min_rated_psu_voltage.get_value(),
-      .max_export_current_A =
-          connector_registers.max_rated_psu_current.get_value(),
-      .min_export_current_A =
-          connector_registers.min_rated_psu_current.get_value(),
-      .max_export_power_W =
-          connector_registers.rated_output_power_psu.get_value() * 1000};
+  Capabilities caps;
+  caps.max_export_voltage_V =
+      connector_registers.max_rated_psu_voltage.get_value();
+  caps.min_export_voltage_V =
+      connector_registers.min_rated_psu_voltage.get_value();
+  caps.max_export_current_A =
+      connector_registers.max_rated_psu_current.get_value();
+  caps.min_export_current_A =
+      connector_registers.min_rated_psu_current.get_value();
+  caps.max_export_power_W =
+      connector_registers.rated_output_power_psu.get_value() * 1000;
+  return caps;
 }
 
 void Connector::reset_psu_capabilities() {

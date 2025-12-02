@@ -67,41 +67,37 @@ TEST_F(DispenserWithMultipleConnectors, ChargingSession) {
 TEST_F(DispenserWithMultipleConnectors, ConnectorCallbacks) {
   auto actual_1 = power_stack_mock->get_connector_callback_values(1);
   auto expected_1 = ConnectorCallbackResults{
-      .connector_upstream_voltage = 100.0f,
-      .output_voltage = 101.0f,
-      .output_current = 102.0f,
-      .contactor_status = ContactorStatus::ON,
-      .electronic_lock_status = ElectronicLockStatus::UNLOCKED,
+      100.0f,
+      101.0f,
+      102.0f,
+      ContactorStatus::ON,
+      ElectronicLockStatus::UNLOCKED,
   };
   EXPECT_EQ(actual_1, expected_1);
 
   auto actual_2 = power_stack_mock->get_connector_callback_values(2);
   auto expected_2 = ConnectorCallbackResults{
-      .connector_upstream_voltage = 200.0f,
-      .output_voltage = 201.0f,
-      .output_current = 202.0f,
-      .contactor_status = ContactorStatus::ON,
-      .electronic_lock_status = ElectronicLockStatus::LOCKED,
+      200.0f, 201.0f, 202.0f, ContactorStatus::ON, ElectronicLockStatus::LOCKED,
   };
   EXPECT_EQ(actual_2, expected_2);
 
   auto actual_3 = power_stack_mock->get_connector_callback_values(3);
   auto expected_3 = ConnectorCallbackResults{
-      .connector_upstream_voltage = 300.0f,
-      .output_voltage = 301.0f,
-      .output_current = 302.0f,
-      .contactor_status = ContactorStatus::OFF,
-      .electronic_lock_status = ElectronicLockStatus::UNLOCKED,
+      300.0f,
+      301.0f,
+      302.0f,
+      ContactorStatus::OFF,
+      ElectronicLockStatus::UNLOCKED,
   };
   EXPECT_EQ(actual_3, expected_3);
 
   auto actual_4 = power_stack_mock->get_connector_callback_values(4);
   auto expected_4 = ConnectorCallbackResults{
-      .connector_upstream_voltage = 400.0f,
-      .output_voltage = 401.0f,
-      .output_current = 402.0f,
-      .contactor_status = ContactorStatus::OFF,
-      .electronic_lock_status = ElectronicLockStatus::LOCKED,
+      400.0f,
+      401.0f,
+      402.0f,
+      ContactorStatus::OFF,
+      ElectronicLockStatus::LOCKED,
   };
   EXPECT_EQ(actual_4, expected_4);
 }
