@@ -196,9 +196,9 @@ void init_tls(int argc, char* argv[], PowerStackMockConfig& config) {
   }
 
   config.tls_config = tls_util::MutualTlsServerConfig{
-      .client_ca = tls_certificates_folder + "dispenser_ca.crt.pem",
-      .server_cert = tls_certificates_folder + "psu.crt.pem",
-      .server_key = tls_certificates_folder + "psu.key.pem",
+      tls_certificates_folder + "dispenser_ca.crt.pem",
+      tls_certificates_folder + "psu.crt.pem",
+      tls_certificates_folder + "psu.key.pem",
   };
 }
 

@@ -95,8 +95,8 @@ void Sender::run() {
   // Send the packet
   try {
     intf->send_packet(current_packet.value()->build_packet({
-        .sq_num = sq_num,
-        .st_num = st_num,
+        sq_num,
+        st_num,
     }));
   } catch (...) {
     log.error << "goose::sender: Failed to send packet";

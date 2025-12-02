@@ -528,109 +528,78 @@ class ErrorRegisters {
       modbus::registers::registry::ComplexRegisterRegistry& registry) {
     raw_registers::AlarmPowerUnitRegisters::DataProviders
         alarm_power_unit_providers{
-            .high_voltage_door_status_sensor =
-                power_unit.high_voltage_door_status_sensor,
-            .door_status_sensor = power_unit.door_status_sensor,
-            .water = power_unit.water,
-            .smoke = power_unit.smoke,
-            .epo = power_unit.epo,
+            power_unit.high_voltage_door_status_sensor,
+            power_unit.door_status_sensor,
+            power_unit.water,
+            power_unit.smoke,
+            power_unit.epo,
         };
     registry.add(std::make_unique<raw_registers::AlarmPowerUnitRegisters>(
         alarm_power_unit_providers));
 
     raw_registers::AlarmChargingPowerUnitRegisters::DataProviders
         alarm_charging_power_unit_providers{
-            .unknown_system_type = charging_power_unit.unknown_system_type,
-            .power_detection_exception =
-                charging_power_unit.power_detection_exception,
-            .syncrhonization_cable_status_fault_of_energy_routing_board =
-                charging_power_unit
-                    .syncrhonization_cable_status_fault_of_energy_routing_board,
-            .soft_start_fault = charging_power_unit.soft_start_fault,
-            .soft_start_module_communication_failure =
-                charging_power_unit.soft_start_module_communication_failure,
-            .soft_start_module_overloaded =
-                charging_power_unit.soft_start_module_overloaded,
-            .soft_start_module_fault =
-                charging_power_unit.soft_start_module_fault,
-            .soft_start_module_overtemperature =
-                charging_power_unit.soft_start_module_overtemperature,
-            .soft_start_module_undertemperature =
-                charging_power_unit.soft_start_module_undertemperature,
-            .soft_start_module_disconnection_failure =
-                charging_power_unit.soft_start_module_disconnection_failure,
-            .phase_sequence_abornmal_alarm =
-                charging_power_unit.phase_sequence_abornmal_alarm,
-            .power_distribution_module_communication_failure =
-                charging_power_unit
-                    .power_distribution_module_communication_failure,
-            .fault_of_insulation_resistance_to_ground =
-                charging_power_unit.fault_of_insulation_resistance_to_ground,
-            .modbus_tcp_certificate =
-                charging_power_unit.modbus_tcp_certificate,
-        };
+            charging_power_unit.unknown_system_type,
+            charging_power_unit.power_detection_exception,
+            charging_power_unit
+                .syncrhonization_cable_status_fault_of_energy_routing_board,
+            charging_power_unit.soft_start_fault,
+            charging_power_unit.soft_start_module_communication_failure,
+            charging_power_unit.soft_start_module_overloaded,
+            charging_power_unit.soft_start_module_fault,
+            charging_power_unit.soft_start_module_overtemperature,
+            charging_power_unit.soft_start_module_undertemperature,
+            charging_power_unit.soft_start_module_disconnection_failure,
+            charging_power_unit.phase_sequence_abornmal_alarm,
+            charging_power_unit.power_distribution_module_communication_failure,
+            charging_power_unit.fault_of_insulation_resistance_to_ground,
+            charging_power_unit.modbus_tcp_certificate};
+
     registry.add(
         std::make_unique<raw_registers::AlarmChargingPowerUnitRegisters>(
             alarm_charging_power_unit_providers));
 
     raw_registers::AlarmAcBranchRegisters::DataProviders
-        alarm_ac_branch_providers{
-            .ac_branch_1 = ac_branch.ac_branch_1,
-            .ac_branch_2 = ac_branch.ac_branch_2,
-        };
+        alarm_ac_branch_providers{ac_branch.ac_branch_1, ac_branch.ac_branch_2};
     registry.add(std::make_unique<raw_registers::AlarmAcBranchRegisters>(
         alarm_ac_branch_providers));
 
     raw_registers::AlarmAcDcRectifierRegisters::DataProviders
         ac_dc_rectifier_providers{
-            .rectifier_1 = ac_dc_rectifier.rectifier_1,
-            .rectifier_2 = ac_dc_rectifier.rectifier_2,
-            .rectifier_3 = ac_dc_rectifier.rectifier_3,
-            .rectifier_4 = ac_dc_rectifier.rectifier_4,
-            .rectifier_5 = ac_dc_rectifier.rectifier_5,
-            .rectifier_6 = ac_dc_rectifier.rectifier_6,
-        };
+            ac_dc_rectifier.rectifier_1, ac_dc_rectifier.rectifier_2,
+            ac_dc_rectifier.rectifier_3, ac_dc_rectifier.rectifier_4,
+            ac_dc_rectifier.rectifier_5, ac_dc_rectifier.rectifier_6};
     registry.add(std::make_unique<raw_registers::AlarmAcDcRectifierRegisters>(
         ac_dc_rectifier_providers));
 
     raw_registers::DcDcChargingModuleRegisters::DataProviders
-        dc_dc_charging_module_providers{
-            .dc_dc_charging_module_1 = dc_dc_charging_module.dc_dc_module_1,
-            .dc_dc_charging_module_2 = dc_dc_charging_module.dc_dc_module_2,
-            .dc_dc_charging_module_3 = dc_dc_charging_module.dc_dc_module_3,
-            .dc_dc_charging_module_4 = dc_dc_charging_module.dc_dc_module_4,
-            .dc_dc_charging_module_5 = dc_dc_charging_module.dc_dc_module_5,
-            .dc_dc_charging_module_6 = dc_dc_charging_module.dc_dc_module_6,
-            .dc_dc_charging_module_7 = dc_dc_charging_module.dc_dc_module_7,
-            .dc_dc_charging_module_8 = dc_dc_charging_module.dc_dc_module_8,
-            .dc_dc_charging_module_9 = dc_dc_charging_module.dc_dc_module_9,
-            .dc_dc_charging_module_10 = dc_dc_charging_module.dc_dc_module_10,
-            .dc_dc_charging_module_11 = dc_dc_charging_module.dc_dc_module_11,
-            .dc_dc_charging_module_12 = dc_dc_charging_module.dc_dc_module_12,
-        };
+        dc_dc_charging_module_providers{dc_dc_charging_module.dc_dc_module_1,
+                                        dc_dc_charging_module.dc_dc_module_2,
+                                        dc_dc_charging_module.dc_dc_module_3,
+                                        dc_dc_charging_module.dc_dc_module_4,
+                                        dc_dc_charging_module.dc_dc_module_5,
+                                        dc_dc_charging_module.dc_dc_module_6,
+                                        dc_dc_charging_module.dc_dc_module_7,
+                                        dc_dc_charging_module.dc_dc_module_8,
+                                        dc_dc_charging_module.dc_dc_module_9,
+                                        dc_dc_charging_module.dc_dc_module_10,
+                                        dc_dc_charging_module.dc_dc_module_11,
+                                        dc_dc_charging_module.dc_dc_module_12};
     registry.add(std::make_unique<raw_registers::DcDcChargingModuleRegisters>(
         dc_dc_charging_module_providers));
 
     raw_registers::CoolingSectionRegisters::DataProviders
-        cooling_section_providers{
-            .cooling_unit_1 = cooling_section.cooling_unit_1,
-        };
+        cooling_section_providers{cooling_section.cooling_unit_1};
     registry.add(std::make_unique<raw_registers::CoolingSectionRegisters>(
         cooling_section_providers));
 
     raw_registers::PowerDistributionModuleRegisters::DataProviders
         power_distribution_module_providers{
-            .power_distribution_module_1 =
-                power_distribution_module.power_distribution_module_1,
-            .power_distribution_module_2 =
-                power_distribution_module.power_distribution_module_2,
-            .power_distribution_module_3 =
-                power_distribution_module.power_distribution_module_3,
-            .power_distribution_module_4 =
-                power_distribution_module.power_distribution_module_4,
-            .power_distribution_module_5 =
-                power_distribution_module.power_distribution_module_5,
-        };
+            power_distribution_module.power_distribution_module_1,
+            power_distribution_module.power_distribution_module_2,
+            power_distribution_module.power_distribution_module_3,
+            power_distribution_module.power_distribution_module_4,
+            power_distribution_module.power_distribution_module_5};
     registry.add(
         std::make_unique<raw_registers::PowerDistributionModuleRegisters>(
             power_distribution_module_providers));
@@ -760,24 +729,22 @@ class ErrorRegisters {
         DataProviderHolding<uint32_t>(0);
   } power_distribution_module;
 
-#define ERROR_ALARM_CALLBACK(CATEGORY, SUBCATEGORY)       \
-  [callback](AlarmStatus register_value) {                \
-    struct ErrorEvent event = {                           \
-        .error_category = CATEGORY,                       \
-        .error_subcategory = SUBCATEGORY,                 \
-        .payload = ErrorPayload{.alarm = register_value}, \
-    };                                                    \
-    callback(event);                                      \
+#define ERROR_ALARM_CALLBACK(CATEGORY, SUBCATEGORY) \
+  [callback](AlarmStatus register_value) {          \
+    struct ErrorEvent event;                        \
+    event.error_category = CATEGORY;                \
+    event.error_subcategory = SUBCATEGORY;          \
+    event.payload.alarm = register_value;           \
+    callback(event);                                \
   }
 
-#define ERROR_BITFLAGS_CALLBACK(CATEGORY, SUBCATEGORY)          \
-  [callback](uint32_t register_value) {                         \
-    struct ErrorEvent event = {                                 \
-        .error_category = CATEGORY,                             \
-        .error_subcategory = SUBCATEGORY,                       \
-        .payload = ErrorPayload{.error_flags = register_value}, \
-    };                                                          \
-    callback(event);                                            \
+#define ERROR_BITFLAGS_CALLBACK(CATEGORY, SUBCATEGORY) \
+  [callback](uint32_t register_value) {                \
+    struct ErrorEvent event;                           \
+    event.error_category = CATEGORY;                   \
+    event.error_subcategory = SUBCATEGORY;             \
+    event.payload.error_flags = register_value;        \
+    callback(event);                                   \
   }
 
 #define POWER_UNIT_ALARM_CALLBACK(SUBCATEGORY)   \
@@ -893,14 +860,11 @@ class ErrorRegisters {
     // This one is special, because it is the only uint16_t flags register
     charging_power_unit.modbus_tcp_certificate.add_write_callback(
         [callback](uint16_t register_value) {
-          struct ErrorEvent event = {
-              .error_category = ErrorCategory::ChargingPowerUnit,
-              .error_subcategory =
-                  ErrorSubcategory{.charging_power_unit =
-                                       ErrorSubcategoryChargingPowerUnit::
-                                           ModbusTcpCertificate},
-              .payload = ErrorPayload{.error_flags = register_value},
-          };
+          struct ErrorEvent event;
+          event.error_category = ErrorCategory::ChargingPowerUnit;
+          event.error_subcategory.charging_power_unit =
+              ErrorSubcategoryChargingPowerUnit::ModbusTcpCertificate;
+          event.payload.error_flags = register_value;
           callback(event);
         });
   }

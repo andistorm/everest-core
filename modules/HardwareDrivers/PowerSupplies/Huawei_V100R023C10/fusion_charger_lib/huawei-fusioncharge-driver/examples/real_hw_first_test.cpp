@@ -73,21 +73,23 @@ int main(int argc, char* argv[]) {
   UnsolicitatedReportBasicServer server(pcl);
 
   PowerUnitRegisters       psu_registers;
-  DispenserRegisters       dispenser_registers(DispenserRegistersConfig{
-            .esn = "1234567890",
-            .connector_count = 1,
-  });
-  ConnectorRegistersConfig connector_register_config = ConnectorRegistersConfig{
-      .mac_address = {*eth.get_mac_address()},  // todo: fix!!
-      .type = ConnectorType::CCS1,
-      .global_connector_no = 1,
-      .connector_number = 1,
-      .max_rated_charge_current = 100.0,
-      .rated_output_power_connector = 10000.0,
-      .get_contactor_upstream_voltage = []() { return 0.0; },
-      .get_output_voltage = []() { return 0.0; },
-      .get_output_current = []() { return 0.0; },
+  DispenserRegistersConfig dispenser_registers_config;
+  dispenser_registers_config.esn = "1234567890";
+  dispenser_registers_config.connector_count = 1;
+  DispenserRegisters       dispenser_registers(dispenser_registers_config);
+  ConnectorRegistersConfig connector_register_config;
+  std::copy(eth.get_mac_address(), eth.get_mac_address() + 6,
+            std::begin(connector_register_config.mac_address));
+  connector_register_config.type = ConnectorType::CCS1;
+  connector_register_config.global_connector_no = 1;
+  connector_register_config.connector_number = 1;
+  connector_register_config.max_rated_charge_current = 100.0;
+  connector_register_config.rated_output_power_connector = 10000.0;
+  connector_register_config.get_contactor_upstream_voltage = []() {
+    return 0.0;
   };
+  connector_register_config.get_output_voltage = []() { return 0.0; };
+  connector_register_config.get_output_current = []() { return 0.0; };
   ConnectorRegisters connector_registers(connector_register_config);
   // Callbacks for common power unit registers
   psu_registers.manufacturer.add_write_callback([](uint16_t value) {

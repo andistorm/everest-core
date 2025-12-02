@@ -321,26 +321,23 @@ TEST_F(DispenserWithTlsTest, ErrorReportingPowerUnit) {
   power_stack_mock->write_registers(0x4000, {(uint16_t)AlarmStatus::ALARM});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(ErrorEvent{
-          .error_category = ErrorCategory::PowerUnit,
-          .error_subcategory =
-              {.power_unit =
-                   ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor},
-          .payload = ErrorPayload{.alarm = AlarmStatus::ALARM},
-      }));
+  ErrorEvent error_event_1;
+  error_event_1.error_category = ErrorCategory::PowerUnit;
+  error_event_1.error_subcategory.power_unit =
+      ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor;
+  error_event_1.payload.alarm = AlarmStatus::ALARM;
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(ErrorEvent{
-          .error_category = ErrorCategory::PowerUnit,
-          .error_subcategory =
-              {.power_unit =
-                   ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor},
-          .payload = ErrorPayload{.alarm = AlarmStatus::ALARM},
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_1));
 
-      }));
+  ErrorEvent error_event_2;
+  error_event_2.error_category = ErrorCategory::PowerUnit;
+  error_event_2.error_subcategory.power_unit =
+      ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor;
+  error_event_2.payload.alarm = AlarmStatus::ALARM;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_2));
 
   power_stack_mock->write_registers(0x4000, {(uint16_t)AlarmStatus::NORMAL});
   sleep_for_ms(10);
@@ -353,23 +350,20 @@ TEST_F(DispenserWithTlsTest, ErrorReportingChargingPowerUnit) {
   power_stack_mock->write_registers(0x4012, {25});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(
-          ErrorEvent{
-              .error_category = ErrorCategory::ChargingPowerUnit,
-              .error_subcategory =
-                  {.charging_power_unit =
-                       ErrorSubcategoryChargingPowerUnit::SoftStartFault},
-              .payload = ErrorPayload{.alarm = AlarmStatus::ALARM},
-          },
-          ErrorEvent{
-              .error_category = ErrorCategory::ChargingPowerUnit,
-              .error_subcategory =
-                  {.charging_power_unit =
-                       ErrorSubcategoryChargingPowerUnit::ModbusTcpCertificate},
-              .payload = ErrorPayload{.error_flags = 25},
-          }));
+  ErrorEvent error_event_1;
+  error_event_1.error_category = ErrorCategory::ChargingPowerUnit;
+  error_event_1.error_subcategory.charging_power_unit =
+      ErrorSubcategoryChargingPowerUnit::SoftStartFault;
+  error_event_1.payload.alarm = AlarmStatus::ALARM;
+
+  ErrorEvent error_event_2;
+  error_event_2.error_category = ErrorCategory::ChargingPowerUnit;
+  error_event_2.error_subcategory.charging_power_unit =
+      ErrorSubcategoryChargingPowerUnit::ModbusTcpCertificate;
+  error_event_2.payload.error_flags = 25;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_1, error_event_2));
 }
 
 TEST_F(DispenserWithTlsTest, ErrorReportingAcBranch) {
@@ -377,21 +371,20 @@ TEST_F(DispenserWithTlsTest, ErrorReportingAcBranch) {
   power_stack_mock->write_registers(0x4022, {1, 0});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(
-          ErrorEvent{
-              .error_category = ErrorCategory::AcBranch,
-              .error_subcategory = {.ac_branch =
-                                        ErrorSubcategoryAcBranch::AcBranch1},
-              .payload = ErrorPayload{.error_flags = 1},
-          },
-          ErrorEvent{
-              .error_category = ErrorCategory::AcBranch,
-              .error_subcategory = {.ac_branch =
-                                        ErrorSubcategoryAcBranch::AcBranch2},
-              .payload = ErrorPayload{.error_flags = 0x10000},
-          }));
+  ErrorEvent error_event_1;
+  error_event_1.error_category = ErrorCategory::AcBranch;
+  error_event_1.error_subcategory.ac_branch =
+      ErrorSubcategoryAcBranch::AcBranch1;
+  error_event_1.payload.error_flags = 1;
+
+  ErrorEvent error_event_2;
+  error_event_2.error_category = ErrorCategory::AcBranch;
+  error_event_2.error_subcategory.ac_branch =
+      ErrorSubcategoryAcBranch::AcBranch2;
+  error_event_2.payload.error_flags = 0x10000;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_1, error_event_2));
 }
 
 TEST_F(DispenserWithTlsTest, ErrorReportingAcDcRectifier) {
@@ -399,22 +392,20 @@ TEST_F(DispenserWithTlsTest, ErrorReportingAcDcRectifier) {
   power_stack_mock->write_registers(0x404A, {1, 0});
   sleep_for_ms(10);
 
+  ErrorEvent error_event_1;
+  error_event_1.error_category = ErrorCategory::AcDcRectifier;
+  error_event_1.error_subcategory.ac_dc_rectifier =
+      ErrorSubcategoryAcDcRectifier::rectifier_1;
+  error_event_1.payload.error_flags = 1;
+
+  ErrorEvent error_event_2;
+  error_event_2.error_category = ErrorCategory::AcDcRectifier;
+  error_event_2.error_subcategory.ac_dc_rectifier =
+      ErrorSubcategoryAcDcRectifier::rectifier_6;
+  error_event_2.payload.error_flags = 0x10000;
+
   EXPECT_THAT(dispenser->get_raised_errors(),
-              testing::ElementsAre(
-                  ErrorEvent{
-                      .error_category = ErrorCategory::AcDcRectifier,
-                      .error_subcategory =
-                          {.ac_dc_rectifier =
-                               ErrorSubcategoryAcDcRectifier::rectifier_1},
-                      .payload = ErrorPayload{.error_flags = 1},
-                  },
-                  ErrorEvent{
-                      .error_category = ErrorCategory::AcDcRectifier,
-                      .error_subcategory =
-                          {.ac_dc_rectifier =
-                               ErrorSubcategoryAcDcRectifier::rectifier_6},
-                      .payload = ErrorPayload{.error_flags = 0x10000},
-                  }));
+              testing::ElementsAre(error_event_1, error_event_2));
 }
 
 TEST_F(DispenserWithTlsTest, ErrorReportingDcDcChargingModule) {
@@ -422,37 +413,34 @@ TEST_F(DispenserWithTlsTest, ErrorReportingDcDcChargingModule) {
   power_stack_mock->write_registers(0x4086, {1, 0});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(
-          ErrorEvent{
-              .error_category = ErrorCategory::DcDcChargingModule,
-              .error_subcategory =
-                  {.dc_dc_charging_module =
-                       ErrorSubcategoryDcDcChargingModule::DcDcModule1},
-              .payload = ErrorPayload{.error_flags = 1},
-          },
-          ErrorEvent{
-              .error_category = ErrorCategory::DcDcChargingModule,
-              .error_subcategory =
-                  {.dc_dc_charging_module =
-                       ErrorSubcategoryDcDcChargingModule::DcDcModule12},
-              .payload = ErrorPayload{.error_flags = 0x10000},
-          }));
+  ErrorEvent error_event_1;
+  error_event_1.error_category = ErrorCategory::DcDcChargingModule;
+  error_event_1.error_subcategory.dc_dc_charging_module =
+      ErrorSubcategoryDcDcChargingModule::DcDcModule1;
+  error_event_1.payload.error_flags = 1;
+
+  ErrorEvent error_event_2;
+  error_event_2.error_category = ErrorCategory::DcDcChargingModule;
+  error_event_2.error_subcategory.dc_dc_charging_module =
+      ErrorSubcategoryDcDcChargingModule::DcDcModule12;
+  error_event_2.payload.error_flags = 0x10000;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_1, error_event_2));
 }
 
 TEST_F(DispenserWithTlsTest, ErrorReportingCoolingSection) {
   power_stack_mock->write_registers(0x40D0, {0x12, 0x3456});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(ErrorEvent{
-          .error_category = ErrorCategory::CoolingSection,
-          .error_subcategory =
-              {.cooling_section = ErrorSubcategoryCoolingSection::CoolingUnit1},
-          .payload = ErrorPayload{.error_flags = 0x123456},
-      }));
+  ErrorEvent error_event;
+  error_event.error_category = ErrorCategory::CoolingSection;
+  error_event.error_subcategory.cooling_section =
+      ErrorSubcategoryCoolingSection::CoolingUnit1;
+  error_event.payload.error_flags = 0x123456;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event));
 }
 
 TEST_F(DispenserWithTlsTest, ErrorReportingPowerDistributionModule) {
@@ -460,37 +448,31 @@ TEST_F(DispenserWithTlsTest, ErrorReportingPowerDistributionModule) {
   power_stack_mock->write_registers(0x40E8, {1, 0});
   sleep_for_ms(10);
 
-  EXPECT_THAT(
-      dispenser->get_raised_errors(),
-      testing::ElementsAre(
-          ErrorEvent{
-              .error_category =
-                  ErrorCategory::ErrorSubcategoryPowerDistributionModule,
-              .error_subcategory =
-                  {.power_distribution_module =
-                       ErrorSubcategoryPowerDistributionModule::
-                           PowerDistributionModule1},
-              .payload = ErrorPayload{.error_flags = 1},
-          },
-          ErrorEvent{
-              .error_category =
-                  ErrorCategory::ErrorSubcategoryPowerDistributionModule,
-              .error_subcategory =
-                  {.power_distribution_module =
-                       ErrorSubcategoryPowerDistributionModule::
-                           PowerDistributionModule5},
-              .payload = ErrorPayload{.error_flags = 0x10000},
-          }));
+  ErrorEvent error_event_1;
+  error_event_1.error_category =
+      ErrorCategory::ErrorSubcategoryPowerDistributionModule;
+  error_event_1.error_subcategory.power_distribution_module =
+      ErrorSubcategoryPowerDistributionModule::PowerDistributionModule1;
+  error_event_1.payload.error_flags = 1;
+
+  ErrorEvent error_event_2;
+  error_event_2.error_category =
+      ErrorCategory::ErrorSubcategoryPowerDistributionModule;
+  error_event_2.error_subcategory.power_distribution_module =
+      ErrorSubcategoryPowerDistributionModule::PowerDistributionModule5;
+  error_event_2.payload.error_flags = 0x10000;
+
+  EXPECT_THAT(dispenser->get_raised_errors(),
+              testing::ElementsAre(error_event_1, error_event_2));
 }
 
 TEST_F(DispenserWithTlsTest, String) {
-  ErrorEvent e = ErrorEvent{
-      .error_category = ErrorCategory::PowerUnit,
-      .error_subcategory =
-          {.power_unit =
-               ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor},
-      .payload = ErrorPayload{.alarm = AlarmStatus::ALARM},
-  };
+  ErrorEvent e;
+  e.error_category = ErrorCategory::PowerUnit;
+  e.error_subcategory.power_unit =
+      ErrorSubcategoryPowerUnit::HighVoltageDoorStatusSensor;
+  e.payload.alarm = AlarmStatus::ALARM;
+
   printf("%s\n", e.to_error_log_string().c_str());
 
   e.error_category = ErrorCategory::ChargingPowerUnit;

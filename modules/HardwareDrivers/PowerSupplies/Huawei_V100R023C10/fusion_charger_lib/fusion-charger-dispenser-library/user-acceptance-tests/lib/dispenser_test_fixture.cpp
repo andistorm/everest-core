@@ -12,109 +12,106 @@ namespace dispenser_fixture {
 using namespace std;
 
 const ConnectorCallbacks default_connector_callbacks = ConnectorCallbacks{
-    .connector_upstream_voltage = []() { return 0.0f; },
-    .output_voltage = []() { return 0.0f; },
-    .output_current = []() { return 0.0f; },
-    .contactor_status = []() { return ContactorStatus::ON; },
-    .electronic_lock_status = []() { return ElectronicLockStatus::UNLOCKED; },
+    []() { return 0.0f; },
+    []() { return 0.0f; },
+    []() { return 0.0f; },
+    []() { return ContactorStatus::ON; },
+    []() { return ElectronicLockStatus::UNLOCKED; },
 };
 
 const DispenserConfig dispenser_config_without_tls = DispenserConfig{
-    .psu_host = "127.0.0.1",
-    .psu_port = 8502,
-    .eth_interface = "veth0",
-    .manufacturer = 0x0002,
-    .model = 0x0080,
-    .protocol_version = 0x0001,
-    .hardware_version = 0x0003,
-    .software_version = "v1.2.3+456",
-    .charging_connector_count = 1,
-    .esn = "01234567890ABCDEF",
-    .modbus_timeout_ms = std::chrono::seconds(2),
-    .send_secure_goose = true,
-    .allow_unsecured_goose = false,
-    .verify_secure_goose_hmac = true,
-    .tls_config = nullopt,
-    .module_placeholder_allocation_timeout = std::chrono::seconds(3),
+    "127.0.0.1",
+    8502,
+    "veth0",
+    0x0002,
+    0x0080,
+    0x0001,
+    0x0003,
+    "v1.2.3+456",
+    1,
+    "01234567890ABCDEF",
+    std::chrono::seconds(2),
+    true,
+    false,
+    true,
+    nullopt,
+    std::chrono::seconds(3),
 };
 
 const PowerStackMockConfig default_power_stack_mock_config_without_tls =
     PowerStackMockConfig{
-        .eth = "veth1",
-        .port = 8502,
-        .hmac_key = {0x67, 0xe4, 0x26, 0x56, 0x0a, 0x70, 0xca, 0x4a, 0x83, 0x3c,
-                     0x44, 0xb3, 0x12, 0x70, 0xca, 0x93, 0x55, 0xd8, 0x7b, 0x02,
-                     0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
-                     0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
-                     0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
-        .tls_config = nullopt,
+        "veth1",
+        8502,
+        {0x67, 0xe4, 0x26, 0x56, 0x0a, 0x70, 0xca, 0x4a, 0x83, 0x3c,
+         0x44, 0xb3, 0x12, 0x70, 0xca, 0x93, 0x55, 0xd8, 0x7b, 0x02,
+         0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
+         0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
+         0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
+        std::nullopt,
     };
 
 DispenserConfig dispenser_config_with_tls = DispenserConfig{
-    .psu_host = "127.0.0.1",
-    .psu_port = 8502,
-    .eth_interface = "veth0",
-    .manufacturer = 0x0002,
-    .model = 0x0080,
-    .protocol_version = 0x0001,
-    .hardware_version = 0x0003,
-    .software_version = "v1.2.3+456",
-    .charging_connector_count = 1,
-    .esn = "01234567890ABCDEF",
-    .modbus_timeout_ms = std::chrono::seconds(2),
-    .send_secure_goose = true,
-    .allow_unsecured_goose = false,
-    .verify_secure_goose_hmac = true,
-    .tls_config =
-        tls_util::MutualTlsClientConfig{
-            .ca_cert =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/"
-                "test_certificates/"
-                "psu_ca.crt.pem",
-            .client_cert =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/"
-                "test_certificates/"
-                "dispenser.crt.pem",
-            .client_key =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/"
-                "test_certificates/"
-                "dispenser.key.pem"},
-    .module_placeholder_allocation_timeout = std::chrono::seconds(3),
+    "127.0.0.1",
+    8502,
+    "veth0",
+    0x0002,
+    0x0080,
+    0x0001,
+    0x0003,
+    "v1.2.3+456",
+    1,
+    "01234567890ABCDEF",
+    std::chrono::seconds(2),
+    true,
+    false,
+    true,
+    tls_util::MutualTlsClientConfig{
+        .ca_cert = "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+                   "fusion_charger_lib/fusion-charger-dispenser-library/"
+                   "user-acceptance-tests/"
+                   "test_certificates/"
+                   "psu_ca.crt.pem",
+        .client_cert =
+            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+            "fusion_charger_lib/fusion-charger-dispenser-library/"
+            "user-acceptance-tests/"
+            "test_certificates/"
+            "dispenser.crt.pem",
+        .client_key =
+            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+            "fusion_charger_lib/fusion-charger-dispenser-library/"
+            "user-acceptance-tests/"
+            "test_certificates/"
+            "dispenser.key.pem"},
+    std::chrono::seconds(3),
 };
 
 const PowerStackMockConfig default_power_stack_mock_config_with_tls =
     PowerStackMockConfig{
-        .eth = "veth1",
-        .port = 8502,
-        .hmac_key = {0x67, 0xe4, 0x26, 0x56, 0x0a, 0x70, 0xca, 0x4a, 0x83, 0x3c,
-                     0x44, 0xb3, 0x12, 0x70, 0xca, 0x93, 0x55, 0xd8, 0x7b, 0x02,
-                     0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
-                     0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
-                     0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
-        .tls_config =
-            tls_util::MutualTlsServerConfig{
-                .client_ca =
-                    "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                    "fusion_charger_lib/fusion-charger-dispenser-library/"
-                    "user-acceptance-tests/test_certificates/"
-                    "dispenser_ca.crt.pem",
-                .server_cert =
-                    "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                    "fusion_charger_lib/fusion-charger-dispenser-library/"
-                    "user-acceptance-tests/test_certificates/"
-                    "psu.crt.pem",
-                .server_key =
-                    "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                    "fusion_charger_lib/fusion-charger-dispenser-library/"
-                    "user-acceptance-tests/test_certificates/"
-                    "psu.key.pem",
-            },
+        "veth1",
+        8502,
+        {0x67, 0xe4, 0x26, 0x56, 0x0a, 0x70, 0xca, 0x4a, 0x83, 0x3c,
+         0x44, 0xb3, 0x12, 0x70, 0xca, 0x93, 0x55, 0xd8, 0x7b, 0x02,
+         0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
+         0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
+         0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
+        tls_util::MutualTlsServerConfig{
+            .client_ca =
+                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+                "fusion_charger_lib/fusion-charger-dispenser-library/"
+                "user-acceptance-tests/test_certificates/"
+                "dispenser_ca.crt.pem",
+            .server_cert =
+                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+                "fusion_charger_lib/fusion-charger-dispenser-library/"
+                "user-acceptance-tests/test_certificates/"
+                "psu.crt.pem",
+            .server_key =
+                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+                "fusion_charger_lib/fusion-charger-dispenser-library/"
+                "user-acceptance-tests/test_certificates/"
+                "psu.key.pem",
+        },
     };
 
 DispenserTestBase::DispenserTestBase(DispenserTestParams params)
@@ -153,41 +150,38 @@ void DispenserTestBase::sleep_for_ms(uint32_t ms) {
 
 DispenserWithTlsTest::DispenserWithTlsTest()
     : DispenserTestBase(DispenserTestParams{
-          .dispenser_config = dispenser_config_with_tls,
-          .connector_configs = {ConnectorConfig{
-              .global_connector_number = 5,
-              .connector_type = ConnectorType::CCS2,
-              .max_rated_charge_current = 100.0,
-              .connector_callbacks = ConnectorCallbacks{
-                  .connector_upstream_voltage =
-                      [this]() {
-                        return this->dispenser_connector_upstream_voltage
-                            .load();
-                      },
-                  .output_voltage =
-                      [this]() {
-                        return this->dispenser_output_voltage.load();
-                      },
-                  .output_current =
-                      [this]() {
-                        return this->dispesner_output_current.load();
-                      },
-                  .contactor_status =
-                      [this]() {
-                        return this->dispenser_contactor_status.load();
-                      },
-                  .electronic_lock_status =
-                      [this]() {
-                        return this->dispenser_electronic_lock_status.load();
-                      },
+          dispenser_config_with_tls,  // dispenser_config
+          {ConnectorConfig{
+              // connector_configs
+              5,                    // global_connector_number
+              ConnectorType::CCS2,  // connector_type
+              100.0,                // max_rated_charge_current
+              0.0,                  // max_rated_output_power
+              ConnectorCallbacks{
+                  // connector_callbacks
+                  [this]() {  // connector_upstream_voltage
+                    return this->dispenser_connector_upstream_voltage.load();
+                  },
+                  [this]() {  // output_voltage
+                    return this->dispenser_output_voltage.load();
+                  },
+                  [this]() {  // output_current
+                    return this->dispesner_output_current.load();
+                  },
+                  [this]() {  // contactor_status
+                    return this->dispenser_contactor_status.load();
+                  },
+                  [this]() {  // electronic_lock_status
+                    return this->dispenser_electronic_lock_status.load();
+                  },
               },
           }},
-          .dispenser_connector_upstream_voltage = 0.0,
-          .dispenser_output_voltage = 0.0,
-          .dispesner_output_current = 0.0,
-          .dispenser_contactor_status = ContactorStatus::OFF,
-          .dispenser_electronic_lock_status = ElectronicLockStatus::UNLOCKED,
-          .power_stack_mock_config = default_power_stack_mock_config_with_tls,
+          0.0,                   // dispenser_connector_upstream_voltage
+          0.0,                   // dispenser_output_voltage
+          0.0,                   // dispesner_output_current
+          ContactorStatus::OFF,  // dispenser_contactor_status
+          ElectronicLockStatus::UNLOCKED,  // dispenser_electronic_lock_status
+          default_power_stack_mock_config_with_tls,  // power_stack_mock_config
       }) {}
 
 std::shared_ptr<Connector> DispenserWithTlsTest::connector() {
@@ -221,42 +215,38 @@ ConnectionStatus DispenserWithTlsTest::get_connection_status() {
 
 DispenserWithoutTlsTest::DispenserWithoutTlsTest()
     : DispenserTestBase(DispenserTestParams{
-          .dispenser_config = dispenser_config_without_tls,
-          .connector_configs = {ConnectorConfig{
-              .global_connector_number = 5,
-              .connector_type = ConnectorType::CCS2,
-              .max_rated_charge_current = 100.0,
-              .connector_callbacks = ConnectorCallbacks{
-                  .connector_upstream_voltage =
-                      [this]() {
-                        return this->dispenser_connector_upstream_voltage
-                            .load();
-                      },
-                  .output_voltage =
-                      [this]() {
-                        return this->dispenser_output_voltage.load();
-                      },
-                  .output_current =
-                      [this]() {
-                        return this->dispesner_output_current.load();
-                      },
-                  .contactor_status =
-                      [this]() {
-                        return this->dispenser_contactor_status.load();
-                      },
-                  .electronic_lock_status =
-                      [this]() {
-                        return this->dispenser_electronic_lock_status.load();
-                      },
+          dispenser_config_without_tls,  // dispenser_config
+          {ConnectorConfig{
+              // connector_configs
+              5,                    // global_connector_number
+              ConnectorType::CCS2,  // connector_type
+              100.0,                // max_rated_charge_current
+              0.0,                  // max_rated_output_power
+              ConnectorCallbacks{
+                  // connector_callbacks
+                  [this]() {  // connector_upstream_voltage
+                    return this->dispenser_connector_upstream_voltage.load();
+                  },
+                  [this]() {  // output_voltage
+                    return this->dispenser_output_voltage.load();
+                  },
+                  [this]() {  // output_current
+                    return this->dispesner_output_current.load();
+                  },
+                  [this]() {  // contactor_status
+                    return this->dispenser_contactor_status.load();
+                  },
+                  [this]() {  // electronic_lock_status
+                    return this->dispenser_electronic_lock_status.load();
+                  },
               },
           }},
-          .dispenser_connector_upstream_voltage = 0.0,
-          .dispenser_output_voltage = 0.0,
-          .dispesner_output_current = 0.0,
-          .dispenser_contactor_status = ContactorStatus::OFF,
-          .dispenser_electronic_lock_status = ElectronicLockStatus::UNLOCKED,
-          .power_stack_mock_config =
-              default_power_stack_mock_config_without_tls,
+          0.0,                   // dispenser_connector_upstream_voltage
+          0.0,                   // dispenser_output_voltage
+          0.0,                   // dispesner_output_current
+          ContactorStatus::OFF,  // dispenser_contactor_status
+          ElectronicLockStatus::UNLOCKED,  // dispenser_electronic_lock_status
+          default_power_stack_mock_config_without_tls,  // power_stack_mock_config
       }) {}
 
 std::shared_ptr<Connector> DispenserWithoutTlsTest::connector() {
@@ -292,74 +282,76 @@ ConnectionStatus DispenserWithoutTlsTest::get_connection_status() {
 dispenser_fixture::DispenserWithMultipleConnectors::
     DispenserWithMultipleConnectors()
     : DispenserTestBase(DispenserTestParams{
-          .dispenser_config = dispenser_config_with_tls,
-          .connector_configs =
-              {
-                  ConnectorConfig{
-                      .global_connector_number = 5,
-                      .connector_type = ConnectorType::CCS2,
-                      .max_rated_charge_current = 100.0,
-                      .connector_callbacks = ConnectorCallbacks{
-                          .connector_upstream_voltage = []() { return 100; },
-                          .output_voltage = []() { return 101; },
-                          .output_current = []() { return 102; },
-                          .contactor_status =
-                              []() { return ContactorStatus::ON; },
-                          .electronic_lock_status =
-                              []() { return ElectronicLockStatus::UNLOCKED; },
-
-                      }},
-                  ConnectorConfig{
-                      .global_connector_number = 10,
-                      .connector_type = ConnectorType::CCS2,
-                      .max_rated_charge_current = 200.0,
-                      .connector_callbacks = ConnectorCallbacks{
-                          .connector_upstream_voltage = []() { return 200; },
-                          .output_voltage = []() { return 201; },
-                          .output_current = []() { return 202; },
-                          .contactor_status =
-                              []() { return ContactorStatus::ON; },
-                          .electronic_lock_status =
-                              []() { return ElectronicLockStatus::LOCKED; },
-
-                      }},
-
-                  ConnectorConfig{
-                      .global_connector_number = 15,
-                      .connector_type = ConnectorType::CCS2,
-                      .max_rated_charge_current = 300.0,
-                      .connector_callbacks = ConnectorCallbacks{
-                          .connector_upstream_voltage = []() { return 300; },
-                          .output_voltage = []() { return 301; },
-                          .output_current = []() { return 302; },
-                          .contactor_status =
-                              []() { return ContactorStatus::OFF; },
-                          .electronic_lock_status =
-                              []() { return ElectronicLockStatus::UNLOCKED; },
-
-                      }},
-                  ConnectorConfig{
-                      .global_connector_number = 4,
-                      .connector_type = ConnectorType::CCS2,
-                      .max_rated_charge_current = 400.0,
-                      .connector_callbacks = ConnectorCallbacks{
-                          .connector_upstream_voltage = []() { return 400; },
-                          .output_voltage = []() { return 401; },
-                          .output_current = []() { return 402; },
-                          .contactor_status =
-                              []() { return ContactorStatus::OFF; },
-                          .electronic_lock_status =
-                              []() { return ElectronicLockStatus::LOCKED; },
-
-                      }},
-
-              },
-          .dispenser_connector_upstream_voltage = 0.0,
-          .dispenser_output_voltage = 0.0,
-          .dispesner_output_current = 0.0,
-          .dispenser_contactor_status = ContactorStatus::OFF,
-          .dispenser_electronic_lock_status = ElectronicLockStatus::UNLOCKED,
-          .power_stack_mock_config = default_power_stack_mock_config_with_tls,
+          dispenser_config_with_tls,  // dispenser_config
+          {
+              // connector_configs
+              ConnectorConfig{
+                  5,                    // global_connector_number
+                  ConnectorType::CCS2,  // connector_type
+                  100.0,                // max_rated_charge_current
+                  0.0,                  // max_rated_output_power
+                  ConnectorCallbacks{
+                      []() { return 100; },  // connector_upstream_voltage
+                      []() { return 101; },  // output_voltage
+                      []() { return 102; },  // output_current
+                      []() { return ContactorStatus::ON; },  // contactor_status
+                      []() {
+                        return ElectronicLockStatus::UNLOCKED;
+                      },  // electronic_lock_status
+                  }},
+              ConnectorConfig{
+                  10,                   // global_connector_number
+                  ConnectorType::CCS2,  // connector_type
+                  200.0,                // max_rated_charge_current
+                  0.0,                  // max_rated_output_power
+                  ConnectorCallbacks{
+                      []() { return 200; },  // connector_upstream_voltage
+                      []() { return 201; },  // output_voltage
+                      []() { return 202; },  // output_current
+                      []() { return ContactorStatus::ON; },  // contactor_status
+                      []() {
+                        return ElectronicLockStatus::LOCKED;
+                      },  // electronic_lock_status
+                  }},
+              ConnectorConfig{
+                  15,                   // global_connector_number
+                  ConnectorType::CCS2,  // connector_type
+                  300.0,                // max_rated_charge_current
+                  0.0,                  // max_rated_output_power
+                  ConnectorCallbacks{
+                      []() { return 300; },  // connector_upstream_voltage
+                      []() { return 301; },  // output_voltage
+                      []() { return 302; },  // output_current
+                      []() {
+                        return ContactorStatus::OFF;
+                      },  // contactor_status
+                      []() {
+                        return ElectronicLockStatus::UNLOCKED;
+                      },  // electronic_lock_status
+                  }},
+              ConnectorConfig{
+                  4,                    // global_connector_number
+                  ConnectorType::CCS2,  // connector_type
+                  400.0,                // max_rated_charge_current
+                  0.0,                  // max_rated_output_power
+                  ConnectorCallbacks{
+                      []() { return 400; },  // connector_upstream_voltage
+                      []() { return 401; },  // output_voltage
+                      []() { return 402; },  // output_current
+                      []() {
+                        return ContactorStatus::OFF;
+                      },  // contactor_status
+                      []() {
+                        return ElectronicLockStatus::LOCKED;
+                      },  // electronic_lock_status
+                  }},
+          },
+          0.0,                   // dispenser_connector_upstream_voltage
+          0.0,                   // dispenser_output_voltage
+          0.0,                   // dispesner_output_current
+          ContactorStatus::OFF,  // dispenser_contactor_status
+          ElectronicLockStatus::UNLOCKED,  // dispenser_electronic_lock_status
+          default_power_stack_mock_config_with_tls,  // power_stack_mock_config
       })
 
 {}
@@ -443,8 +435,7 @@ void DispenserWithMultipleConnectors::assert_requirement_type(
     } else if (expected_types[i] == nullopt) {
       FAIL() << "Actual Status is: "
              << (uint16_t)actual_status.value().requirement_type
-             << " , but expected was NULL"
-             << " regarding connector " << i + 1;
+             << " , but expected was NULL" << " regarding connector " << i + 1;
     }
 
     EXPECT_EQ(actual_status->requirement_type, expected_types[i])
