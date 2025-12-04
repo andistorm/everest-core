@@ -435,7 +435,8 @@ void DispenserWithMultipleConnectors::assert_requirement_type(
     } else if (expected_types[i] == nullopt) {
       FAIL() << "Actual Status is: "
              << (uint16_t)actual_status.value().requirement_type
-             << " , but expected was NULL" << " regarding connector " << i + 1;
+             << " , but expected was NULL"
+             << " regarding connector " << i + 1;
     }
 
     EXPECT_EQ(actual_status->requirement_type, expected_types[i])
