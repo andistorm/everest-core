@@ -88,6 +88,9 @@ class Dispenser {
   std::optional<SettingPowerUnitRegisters::PSURunningMode> psu_running_mode =
       std::nullopt;
 
+  // mutex to call functions on the registry from multiple threads
+  std::mutex registry_mutex;
+
   const int MAX_NUMBER_OF_CONNECTORS = 4;
 
   // true if the psu wrote its mac address via modbus
@@ -144,4 +147,7 @@ class Dispenser {
     // Connector numbers start at 1
     return connectors[local_connector_number - 1];
   }
+
+  /// @brief Trigger an unsolicitated report to be sent now.
+  void do_unsolicitated_report_now();
 };

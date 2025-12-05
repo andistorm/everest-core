@@ -166,7 +166,8 @@ std::string state_to_string(States state) {
 
 Connector::Connector(ConnectorConfig connector_config,
                      uint16_t local_connector_number,
-                     DispenserConfig dispenser_config, logs::LogIntf log)
+                     DispenserConfig dispenser_config, logs::LogIntf log,
+                     std::function<void()> do_unsolicitated_report_callback)
     : connector_config(connector_config),
       local_connector_number(local_connector_number),
       dispenser_config(dispenser_config),
@@ -214,7 +215,8 @@ Connector::Connector(ConnectorConfig connector_config,
                           std::placeholders::_1, std::placeholders::_2);
             return callbacks;
           }(),
-          log, log_prefix) {}
+          log, log_prefix),
+      do_unsolicitated_report_callback(do_unsolicitated_report_callback) {}
 
 Connector::~Connector() { cancel_module_placeholder_allocation_timeout(); }
 
@@ -337,6 +339,11 @@ void Connector::start() {
         log.info << log_prefix + "PSU Max rated current changed to " +
                         std::to_string(value) + " A";
       });
+
+  if (dc_output_contactor_fault_alarm_active.has_value()) {
+    connector_registers.dc_output_contact_fault.update_value(
+        dc_output_contactor_fault_alarm_active.value() ? 1 : 0);
+  }
 
   // todo: reset fsm?
 
@@ -572,4 +579,16 @@ std::vector<uint8_t> Connector::get_hmac_key() {
       connector_registers.hmac_key.get_value();  // pointer to private memory
   return std::vector<uint8_t>(
       hmac_key, hmac_key + connector_registers.hmac_key.get_size());
+}
+
+void Connector::set_dc_output_contactor_fault_alarm(bool active) {
+  connector_registers.dc_output_contact_fault.update_value(active ? 1 : 0);
+
+  // persisted to be set on start()
+  dc_output_contactor_fault_alarm_active = active;
+
+  // immediately do an unsolicitated report
+  if (do_unsolicitated_report_callback) {
+    do_unsolicitated_report_callback();
+  }
 }

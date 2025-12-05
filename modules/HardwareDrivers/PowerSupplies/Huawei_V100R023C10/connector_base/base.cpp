@@ -85,6 +85,17 @@ void ConnectorBase::ev_init() {
             }
         });
 
+    mod->r_board_support[this->connector_no]->subscribe_error(
+        "evse_board_support/MREC17EVSEContactorFault",
+        [this](const Everest::error::Error& error) {
+            get_connector()->set_dc_output_contactor_fault_alarm(true);
+            EVLOG_info << "Received contactor fault error from BSP";
+        },
+        [this](const Everest::error::Error& error) {
+            get_connector()->set_dc_output_contactor_fault_alarm(false);
+            EVLOG_info << "Contactor fault error from BSP cleared";
+        });
+
     if (not mod->r_carside_powermeter.empty()) {
         mod->r_carside_powermeter[this->connector_no]->subscribe_powermeter(
             [this](const types::powermeter::Powermeter& power) {
