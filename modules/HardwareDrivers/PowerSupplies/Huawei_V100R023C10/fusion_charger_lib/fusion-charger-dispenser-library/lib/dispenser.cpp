@@ -533,3 +533,25 @@ void Dispenser::do_unsolicitated_report_now() {
     }
   }
 }
+
+void Dispenser::set_dispenser_alarm(DispenserAlarms alarm, bool active) {
+  switch (alarm) {
+    case DispenserAlarms::DOOR_STATUS_ALARM:
+      dispenser_registers->door_status_alarm.update_value(active ? 1 : 0);
+      break;
+    case DispenserAlarms::WATER_ALARM:
+      dispenser_registers->water_alarm.update_value(active ? 1 : 0);
+      break;
+    case DispenserAlarms::EPO_ALARM:
+      dispenser_registers->epo_alarm.update_value(active ? 1 : 0);
+      break;
+    case DispenserAlarms::TILT_ALARM:
+      dispenser_registers->tilt_alarm.update_value(active ? 1 : 0);
+      break;
+    default:
+      log.error << "Unknown alarm type";
+      break;
+  }
+
+  do_unsolicitated_report_now();
+}

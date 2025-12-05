@@ -49,6 +49,13 @@ typedef fusion_charger::modbus_driver::raw_registers::
 // category and subcategory
 typedef std::set<ErrorEvent, ErrorEventComparator> ErrorEventSet;
 
+enum class DispenserAlarms {
+  DOOR_STATUS_ALARM,
+  WATER_ALARM,
+  EPO_ALARM,
+  TILT_ALARM,
+};
+
 class Dispenser {
  private:
   std::vector<std::shared_ptr<Connector>> connectors;
@@ -150,4 +157,10 @@ class Dispenser {
 
   /// @brief Trigger an unsolicitated report to be sent now.
   void do_unsolicitated_report_now();
+
+  /// @brief Set state for a dispenser alarm. Also triggers an immediate
+  /// unsolicitated report.
+  /// @param alarm the alarm to set
+  /// @param active true to set the alarm, false to clear it
+  void set_dispenser_alarm(DispenserAlarms alarm, bool active);
 };
