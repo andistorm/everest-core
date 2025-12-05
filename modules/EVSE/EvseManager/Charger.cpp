@@ -383,17 +383,17 @@ void Charger::run_state_machine() {
                                         "disable 5 percent if it was enabled before: {}",
                                         (bool)hlc_use_5percent_current_session));
 
-                                hlc_use_5percent_current_session = false;
-
                                 if (hlc_use_5percent_current_session) {
                                     // Figure 3 of ISO15118-3: 5 percent start, PnC and EIM
                                     internal_context.t_step_EF_return_state = target_state;
                                     internal_context.t_step_EF_return_pwm = 0.;
                                     internal_context.t_step_EF_return_ampere = 0.;
                                     shared_context.current_state = EvseState::T_step_EF;
+
                                     // fall back to nominal PWM after the t_step_EF break. Note that
                                     // ac_hlc_enabled_current_session remains untouched as HLC can still start later in
                                     // nominal PWM mode
+                                    hlc_use_5percent_current_session = false;
                                 } else {
                                     // Figure 4 of ISO15118-3: X1 start, PnC and EIM
                                     // This figure requires a T_step_F for X1->Nominal. This does not really make sense.
