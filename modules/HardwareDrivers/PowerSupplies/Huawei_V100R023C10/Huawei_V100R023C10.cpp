@@ -92,9 +92,9 @@ void Huawei_V100R023C10::init() {
     // end fixed
 
     dispenser_config.esn = config.esn;
-    dispenser_config.secure_goose = config.secure_goose;
-    dispenser_config.allow_unsecure_goose = config.allow_unsecure_goose;
-    dispenser_config.verify_secure_goose_hmac = config.verify_secure_goose_hmac;
+    dispenser_config.send_secure_goose = config.send_secure_goose;
+    dispenser_config.allow_unsecured_goose = config.allow_insecure_goose;
+    dispenser_config.verify_secure_goose_hmac = config.verify_secure_goose;
     dispenser_config.module_placeholder_allocation_timeout =
         std::chrono::seconds(config.module_placeholder_allocation_timeout_s);
 
