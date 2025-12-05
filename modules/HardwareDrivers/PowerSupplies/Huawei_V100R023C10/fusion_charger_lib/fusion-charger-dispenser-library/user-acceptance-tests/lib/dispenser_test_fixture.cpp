@@ -47,6 +47,8 @@ const PowerStackMockConfig default_power_stack_mock_config_without_tls =
          0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
          0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
          0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
+        true,
+        true,
         std::nullopt,
     };
 
@@ -66,23 +68,21 @@ DispenserConfig dispenser_config_with_tls = DispenserConfig{
     false,
     true,
     tls_util::MutualTlsClientConfig{
-        .ca_cert = "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                   "fusion_charger_lib/fusion-charger-dispenser-library/"
-                   "user-acceptance-tests/"
-                   "test_certificates/"
-                   "psu_ca.crt.pem",
-        .client_cert =
-            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-            "fusion_charger_lib/fusion-charger-dispenser-library/"
-            "user-acceptance-tests/"
-            "test_certificates/"
-            "dispenser.crt.pem",
-        .client_key =
-            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-            "fusion_charger_lib/fusion-charger-dispenser-library/"
-            "user-acceptance-tests/"
-            "test_certificates/"
-            "dispenser.key.pem"},
+        "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+        "fusion_charger_lib/fusion-charger-dispenser-library/"
+        "user-acceptance-tests/"
+        "test_certificates/"
+        "psu_ca.crt.pem",
+        "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+        "fusion_charger_lib/fusion-charger-dispenser-library/"
+        "user-acceptance-tests/"
+        "test_certificates/"
+        "dispenser.crt.pem",
+        "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+        "fusion_charger_lib/fusion-charger-dispenser-library/"
+        "user-acceptance-tests/"
+        "test_certificates/"
+        "dispenser.key.pem"},
     std::chrono::seconds(3),
 };
 
@@ -95,22 +95,21 @@ const PowerStackMockConfig default_power_stack_mock_config_with_tls =
          0x0f, 0x57, 0x8e, 0x1e, 0x9d, 0x19, 0x74, 0xc0, 0x2f, 0xa6,
          0xf6, 0x80, 0x4c, 0x2f, 0xcb, 0xdf, 0x73, 0x5e, 0x71, 0x1c,
          0xec, 0x08, 0x5b, 0x93, 0x81, 0x47, 0x16, 0xad},
+        true,
+        true,
         tls_util::MutualTlsServerConfig{
-            .client_ca =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/test_certificates/"
-                "dispenser_ca.crt.pem",
-            .server_cert =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/test_certificates/"
-                "psu.crt.pem",
-            .server_key =
-                "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
-                "fusion_charger_lib/fusion-charger-dispenser-library/"
-                "user-acceptance-tests/test_certificates/"
-                "psu.key.pem",
+            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+            "fusion_charger_lib/fusion-charger-dispenser-library/"
+            "user-acceptance-tests/test_certificates/"
+            "dispenser_ca.crt.pem",
+            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+            "fusion_charger_lib/fusion-charger-dispenser-library/"
+            "user-acceptance-tests/test_certificates/"
+            "psu.crt.pem",
+            "modules/HardwareDrivers/PowerSupplies/Huawei_V100R023C10/"
+            "fusion_charger_lib/fusion-charger-dispenser-library/"
+            "user-acceptance-tests/test_certificates/"
+            "psu.key.pem",
         },
     };
 
