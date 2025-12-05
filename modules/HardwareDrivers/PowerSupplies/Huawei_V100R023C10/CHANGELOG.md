@@ -1,5 +1,17 @@
 # Changelog
 
+## December 2025
+
+### Module
+
+- The module now supports publishing some specific BSP errors to the PSU as dispenser and connector alarms:
+  - Per dispenser:
+    - `evse_board_support/DoorOpen` published as Door status alarm to the PSU
+    - `evse_board_support/Water` published as Water alarm
+    - `evse_board_support/MREC8EmergencyStop` published as EPO alarm
+    - `evse_board_support/Tilted` published as Tilt alarm
+  - Per connector:
+    - `evse_board_support/MREC17EVSEContactorFault` published as DC output contactor fault
 ## June 2025
 
 - Module
