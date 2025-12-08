@@ -12,6 +12,11 @@ using namespace fusion_charger::modbus_driver::raw_registers;
 using namespace fusion_charger::modbus_driver;
 using namespace fusion_charger::modbus_extensions;
 
+std::vector<DispenserAlarms> get_all_dispenser_alarms() {
+  return {DispenserAlarms::DOOR_STATUS_ALARM, DispenserAlarms::WATER_ALARM,
+          DispenserAlarms::EPO_ALARM, DispenserAlarms::TILT_ALARM};
+}
+
 void Dispenser::modbus_unsolicitated_event_thread_run() {
   std::this_thread::sleep_for(std::chrono::seconds(1));
   while (psu_communication_is_ok()) {

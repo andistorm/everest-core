@@ -38,6 +38,21 @@ static std::vector<ConnectorBase*> get_connector_bases(Huawei_V100R023C10* mod, 
     return connector_bases;
 }
 
+static std::string get_everest_error_for_dispenser_alarm(DispenserAlarms alarm) {
+    switch (alarm) {
+    case DispenserAlarms::DOOR_STATUS_ALARM:
+        return "evse_board_support/DoorOpen";
+    case DispenserAlarms::WATER_ALARM:
+        return "evse_board_support/Water";
+    case DispenserAlarms::EPO_ALARM:
+        return "evse_board_support/MREC8EmergencyStop";
+    case DispenserAlarms::TILT_ALARM:
+        return "evse_board_support/Tilted";
+    default:
+        throw std::runtime_error("Unknown DispenserAlarm enum value");
+    }
+}
+
 void Huawei_V100R023C10::init() {
     this->communication_fault_raised = false;
     this->psu_not_running_raised = false;
@@ -124,12 +139,9 @@ void Huawei_V100R023C10::init() {
         dispenser_alarms_per_bsp.push_back(std::set<DispenserAlarms>{});
     }
     for (int bsp_idx = 0; bsp_idx < number_of_connectors_used; bsp_idx++) {
-        for (auto& [alarm, everest_error] : {
-                 std::tuple(DispenserAlarms::DOOR_STATUS_ALARM, "evse_board_support/DoorOpen"),
-                 std::tuple(DispenserAlarms::WATER_ALARM, "evse_board_support/Water"),
-                 std::tuple(DispenserAlarms::EPO_ALARM, "evse_board_support/MREC8EmergencyStop"),
-                 std::tuple(DispenserAlarms::TILT_ALARM, "evse_board_support/Tilted"),
-             }) {
+        for (auto& alarm : get_all_dispenser_alarms()) {
+            std::string everest_error = get_everest_error_for_dispenser_alarm(alarm);
+
             r_board_support[bsp_idx]->subscribe_error(
                 everest_error,
                 [this, bsp_idx, alarm, everest_error](const ::Everest::error::Error& e) {

@@ -56,6 +56,9 @@ enum class DispenserAlarms {
   TILT_ALARM,
 };
 
+/// @brief Get a list of all possible DispenserAlarms
+std::vector<DispenserAlarms> get_all_dispenser_alarms();
+
 class Dispenser {
  private:
   std::vector<std::shared_ptr<Connector>> connectors;
