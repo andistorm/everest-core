@@ -89,8 +89,11 @@ class Dispenser {
   std::optional<PowerUnitRegisters> psu_registers;
   std::optional<ErrorRegisters> error_registers;
 
+  // Raised errors by the PSU
   ErrorEventSet raised_errors = {};
   std::mutex raised_error_mutex;
+
+  std::unordered_map<DispenserAlarms, std::atomic<bool>> dispenser_alarms;
 
   std::optional<SettingPowerUnitRegisters::PSURunningMode> psu_running_mode =
       std::nullopt;
@@ -116,6 +119,8 @@ class Dispenser {
   void goose_receiver_thread_run();
   bool psu_communication_is_ok();
   bool is_stop_requested();
+
+  bool get_dispenser_alarm_state(DispenserAlarms alarm);
 
  public:
   Dispenser(DispenserConfig dispenser_config,
