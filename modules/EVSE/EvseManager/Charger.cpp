@@ -481,8 +481,10 @@ void Charger::run_state_machine() {
                 }
             } else if (shared_context.authorized and shared_context.authorized_pnc) {
 
-                if (!start_transaction()) {
-                    break;
+                if (not shared_context.transaction_active) {
+                    if (!start_transaction()) {
+                        break;
+                    }
                 }
 
                 const EvseState target_state(EvseState::PrepareCharging);
@@ -1329,7 +1331,6 @@ void Charger::stop_session() {
 bool Charger::start_transaction() {
     shared_context.stop_transaction_id_token.reset();
     shared_context.last_stop_transaction_reason.reset();
-    shared_context.transaction_active = true;
 
     types::powermeter::TransactionReq req;
     req.evse_id = evse_id;
@@ -1361,6 +1362,7 @@ bool Charger::start_transaction() {
 
     store->store_session(shared_context.session_uuid);
     signal_transaction_started_event(shared_context.id_token);
+    shared_context.transaction_active = true;
     return true;
 }
 
