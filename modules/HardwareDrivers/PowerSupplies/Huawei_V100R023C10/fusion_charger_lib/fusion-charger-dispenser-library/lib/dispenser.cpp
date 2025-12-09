@@ -444,12 +444,12 @@ void Dispenser::init() {
       std::lock_guard<std::mutex> lock(this->raised_error_mutex);
 
       if (event.payload.is_error()) {
-        if (raised_errors.contains(event)) {
+        if (raised_errors.find(event) != raised_errors.end()) {
           raised_errors.erase(event);
         }
         raised_errors.insert(event);
       } else {
-        if (raised_errors.contains(event)) {
+        if (raised_errors.find(event) != raised_errors.end()) {
           raised_errors.erase(event);
         }
       }

@@ -5,6 +5,7 @@
 #include <fusion_charger/modbus/extensions/unsolicitated_registers.hpp>
 #include <modbus-registers/registers.hpp>
 #include <modbus-registers/registry.hpp>
+#include <ostream>
 #include <stdexcept>
 
 namespace fusion_charger {
