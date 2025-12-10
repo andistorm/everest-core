@@ -438,9 +438,8 @@ std::optional<types::isolation_monitor::IsolationMeasurement> isolation_monitorI
     isolation_measurement.resistance_F_Ohm =
         static_cast<float>(insulation_resistance_to_ohm(raw_insulation_resistance));
 
-    // 0xFFFF means voltage out of range, 0V means either less than 5V or could not be measured
-    // we assume the worst case -> we don't publish 0V or if out of range
-    if (raw_voltage != 0xFFFF and raw_voltage != 0) {
+    // 0xFFFF means voltage out of range
+    if (raw_voltage != 0xFFFF) {
         isolation_measurement.voltage_V = static_cast<float>(raw_voltage);
     }
 
