@@ -404,7 +404,7 @@ bool isolation_monitorImpl::update_control_word1(ControlWord1Action action) {
     }
 
     if (action == ControlWord1Action::StartSelfTest) {
-        // Note that the self test only works when measurement is not disabled
+        // Note that the self test only works when measurement is not disabled, so we only set bit 4 here
         return write_holding_register(0, 1U << 4); // Bit 4: Start self test
     }
 

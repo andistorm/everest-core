@@ -35,7 +35,6 @@ This driver supports three modes of operation:
 ## Other notes
 
 - For applications following UL 2231 the parameter `automatic_self_test` has to be disabled (i.e. set to `false`)
-- Self testing is only possible when bit 8 of the "control word 1" register (address 40001) is not set, i.e. when measurement is not disabled. Because of this, the module enables measurements temporarily before starting a self test
 - Changes to modbus registers triggered by modbus messages may have a short delay before they can be read back over the bus. The device's internal reaction is faster than what is reported via Modbus, however
 - The device state may not always report "Error" when a device fault is present (i.e. the device has an internal fault or the device fault register reports a fault), because of internal prioritization of faults. Because of this, we only check the device fault register to determine if a fault is present and report that to Everest
 - If a modbus communication timeout occurs, the device only responds to modbus requests that either read data or write a reset command. All other requests will receive a 0x04 exception code
