@@ -124,23 +124,11 @@ When we get the response from the PSU that the module placeholder allocation fai
 
 This flag is reset when we go out of the Running state.
 
-# Notiz zum Verhalten bzgl. State
+### Connection state
 
-Der State wird in 2 "Sub-States" aufgeteilt
+The Module keeps track of the connection state with the PSU. There are the following states:
 
-## Substate Init
-- `Init`: Start-State; Baut Modbus-Verbindung auf und wartet auf die MAC Adresse der PSU; ggf. Spawned Goose Thread(s)
-- `OK`: Init war erfolgreich
-- `Failed`: Init war nicht erfolgreich -> Fehlerzustand
-
-Wenn der Heartbeat beim Modbus aussetzt gehen wir zurück und versuchen erneut eine `init`. Dies wiederholt sich ggf. endlos
-
-## Substate PowerRequestStatus
-**Der Status ist nur relevant, wenn der Init-State auf `OK` ist!**
-
-- `Stop`: Start-State; Wenn sich ein Auto verbindet, Überagng in `init`
-- `Init`: Wartet auf HMAC von der PSU; Wenn erhalten, Placeholder Request über Goose senden. Abhängig von Response in `ready` (Positive Response) oder `failed (Negative Response oder Timeout (Timeouts bei Goose nachschauen))
-- `Ready`: Auto lädt und Goose-Frames werden fröhlich hin-und-her geschoben; Übergang in `Stop`, wenn Laden beendet (=> Löschen der HMAC, da diese jetzt nicht mehr genutzt wird)
-- `Failed`: Bleibt in dem Zustand, bis Car Disconnected wird. Dann Überagng in `Stop` (=> HMAC löschen)
-
-=> Wie umgehen, wenn zurück im Start State, aber Auto bereits verbunden ist? Kann dies passieren?
+- `UNINITIALIZED` The Dispenser has not been started yet or has been stopped. No communication is happening
+- `INITIALIZING` `start()` has been called, a modbus connection is being established. The communication is not yet ready
+- `READY` The PSU's Ethernet MAC was received, communication is ready and working
+- `FAILED` The communication failed, no communication is happening in this state; the module stays in this state until `stop()` is called
