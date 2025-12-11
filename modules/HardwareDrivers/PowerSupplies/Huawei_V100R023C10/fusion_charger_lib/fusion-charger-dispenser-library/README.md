@@ -108,15 +108,15 @@ We are done charging and ready to charge again. If the car disconnects we go bac
 
 ### Connection State
 
-| State(siehe oben) | ConnectionState |
-| ----------------- | --------------- |
-| CarDisconnected   | NOT_CONNECTED   |
-| *                 | FULLY_CONNECTED |
+| State(see above) | ConnectionState |
+| ---------------- | --------------- |
+| CarDisconnected  | NOT_CONNECTED   |
+| *                | FULLY_CONNECTED |
 
 ### Charge Event
 
-- Transition zu Running: STOP_TO_START
-- Transition zu Completed: START_TO_STOP
+- Transition to Running: STOP_TO_START
+- Transition to Completed: START_TO_STOP
 
 ### Module Placeholder Allocation failed
 
