@@ -1,0 +1,27 @@
+name: Execute on Main Branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  export-repos:
+    name: Export Repositories
+    uses: ./.github/workflows/export_repo.yaml
+    strategy:
+      matrix:
+        include:
+          - source-subdirectory: 'lib/everest/cbv2g'
+            target-repo-url: git@github.com:${{ github.repository_owner }}/libcbv2g.git
+            target-repo-branch: 'main'
+            replace-placeholder: '@@GIT_TAG_EVEREST_CORE@@'
+            replace-placeholder-file: 'some-dir/placeholder-file.txt'
+    with:
+      runner: 'ubuntu-24.04'
+      source-subdirectory: '${{ matrix.source-subdirectory }}'
+      target-repo-url: '${{ matrix.target-repo-url }}'
+      target-repo-branch: '${{ matrix.target-repo-branch }}'
+      replace-placeholder: '${{ matrix.replace-placeholder }}'
+      replace-placeholder-file: '${{ matrix.replace-placeholder-file }}'
+    secrets:
+      SA_GITHUB_SSH_KEY: ${{ secrets.SA_GITHUB_SSH_KEY }}
