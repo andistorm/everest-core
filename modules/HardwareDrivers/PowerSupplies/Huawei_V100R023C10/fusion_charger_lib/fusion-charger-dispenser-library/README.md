@@ -17,8 +17,6 @@ sudo ip link delete veth0
 
 ## FSM
 
-Erarbeitet während des Workshops
-
 ```mermaid
 stateDiagram
   [*] --> CarDisconnected
