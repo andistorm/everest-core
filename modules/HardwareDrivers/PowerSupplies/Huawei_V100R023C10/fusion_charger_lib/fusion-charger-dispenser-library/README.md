@@ -93,7 +93,7 @@ We are done charging and ready to charge again. If the car disconnects we go bac
 
 ### Goose Frames
 
-| State (siehe oben)    | EV Mode | EV Phase       | Goose type       | Goose PowerRequirement type              |
+| State (see above)     | EV Mode | EV Phase       | Goose type       | Goose PowerRequirement type              |
 | --------------------- | ------- | -------------- | ---------------- | ---------------------------------------- |
 | CarDisconnected       | *       | *              | Stop             |                                          |
 | NoKeyYet              | *       | *              | Stop             |                                          |
